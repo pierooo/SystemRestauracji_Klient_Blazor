@@ -1,0 +1,48 @@
+﻿@page "/Categories/{ID}"
+@attribute [Authorize]
+@inject ICategoriesService CategoriesService
+@inject Microsoft.AspNetCore.Components.NavigationManager navigationManager
+
+<div class="row">
+    <div class="col-md-4">
+        <form>
+            <div class="form-group">
+                <label for="CategoryName" class="control-label">Nazwa</label>
+                <input for="CategoryName" class="form-control" @bind-value="@category.CategoryName" />
+
+                <label for="Description" class="control-label">Opis</label>
+                <input for="Description" class="form-control" @bind-value="@category.Description"/>
+
+                <input type="hidden" @bind-value="@category.ID"/>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" @onclick="() => UpdateCategory()">Zapisz</button>
+                <button type="button" class="btn btn-danger" @onclick="() => cancel()">Anuluj</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@code  {
+
+    [Parameter]
+    public string ID { get; set; }
+
+    Category category = new Category();
+
+    protected override async Task OnInitializedAsync()
+    {
+        category = await CategoriesService.GetById(Convert.ToInt32(ID));
+    }
+
+    protected async Task UpdateCategory()
+    {
+        await CategoriesService.Update(category);
+        navigationManager.NavigateTo("/Categories");
+    }
+
+    void cancel()
+    {
+        navigationManager.NavigateTo("/Categories");
+    }
+}

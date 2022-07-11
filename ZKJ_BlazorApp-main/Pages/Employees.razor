@@ -1,0 +1,35 @@
+﻿@page "/employees"
+@attribute [Authorize]
+@inject IEmployeeService EmployeesService
+
+<div class="card mt-4">
+    <h4 class="card-header">Users</h4>
+    <div class="card-body">
+        <h6>Users from secure api end point</h6>
+        @if (loading)
+        {
+            <div class="spinner-border spinner-border-sm"></div>
+        }
+        @if (employees != null)
+        {
+            <ul>
+                @foreach (var employee in employees)
+                {
+                    <li>@employee.FirstName @employee.LastName</li>
+                }
+            </ul>
+        }
+    </div>
+</div>
+
+@code {
+    private bool loading;
+    private IEnumerable<Employee> employees;
+
+    protected override async Task OnInitializedAsync()
+    {
+        loading = true;
+        employees = await EmployeesService.GetAll();
+        loading = false;
+    }
+}

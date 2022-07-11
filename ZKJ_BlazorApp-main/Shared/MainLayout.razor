@@ -1,0 +1,25 @@
+﻿@inherits LayoutComponentBase
+@inject IAuthenticationService AuthenticationService
+@inject NavigationManager NavigationManager
+@code { private Role Role; }
+
+@if (AuthenticationService.Employee != null)
+{
+    <!-- nav -->
+    <nav class="navbar navbar-expand navbar-dark bg-dark">
+        <div class="navbar-nav">
+            <NavLink href="" Match="NavLinkMatch.All" class="nav-item nav-link">Home</NavLink>
+            @if (AuthenticationService.Employee.Role == Role.Menager || AuthenticationService.Employee.Role == Role.Owner)
+            {
+            <NavLink href="Employees" class="nav-item nav-link">Pracownicy</NavLink>
+            }
+            <NavLink href="Categories" class="nav-item nav-link">Kategorie</NavLink>
+            <NavLink href="counter" class="nav-item nav-link">Counter</NavLink>
+            <NavLink href="logout" class="nav-item nav-link">Logout</NavLink>
+        </div>
+    </nav>
+}
+
+<div class="container">
+    @Body
+</div>
